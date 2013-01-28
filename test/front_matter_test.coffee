@@ -15,8 +15,7 @@ describe 'extractFrontMatter', ->
       assert.propertyVal(frontMatter, 'author', 'Matthew Lyon')
 
     it "removes front matter from the text", ->
-      assert.equal(lines[0], '')
-      assert.equal(lines[1], '# {{ title }}')
+      assert.equal(lines[0], '# {{ title }}')
 
   describe "without front matter", ->
     plain = "# Documents\n\nHello There."

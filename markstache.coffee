@@ -5,12 +5,13 @@ frontMatterLine = /^(\w+):\s*(.*)$/m
 extractFrontMatter = (text) ->
   if text.match(frontMatterLine)
     frontMatter = {}
-    lines = text.split('\n')
-    while match = lines[0].match(frontMatterLine)
+    [front, rest...] = text.split("\n\n")
+    lines = front.split('\n')
+    while match = lines[0]?.match(frontMatterLine)
       [line, key, value] = match
       frontMatter[key.toLowerCase()] = value
       lines.shift()
-    [frontMatter, lines.join('\n')]
+    [frontMatter, rest.join('\n\n')]
   else [{}, text]
 
 markdownSection = (text, type) ->
