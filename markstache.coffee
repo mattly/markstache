@@ -17,8 +17,6 @@ markdownSection = (text, type) ->
   [section, text] = extractFrontMatter(text)
   section.type = type
   section.text = text
-  for key, value of section
-    section[key] = value
   section
 
 startSectionRegex = /{%\s*(\w+)\s*%}/
