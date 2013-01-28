@@ -1,20 +1,25 @@
-markdown = require('namp')
+markdown = require('marked')
 
-markdownMeta = (text) ->
-  metadata = {}
-  tree = markdown.lexer(text)
-  while tree[0]?.type is 'metadata'
-    {key, value} = tree.shift()
-    metadata[key.toLowerCase()] = value
-  {metadata, references:tree.links, text}
+frontMatterLine = /^(\w+):\s*(.*)$/m
+
+extractFrontMatter = (text) ->
+  if text.match(frontMatterLine)
+    frontMatter = {}
+    lines = text.split('\n')
+    while match = lines[0].match(frontMatterLine)
+      [line, key, value] = match
+      frontMatter[key.toLowerCase()] = value
+      lines.shift()
+    [frontMatter, lines.join('\n')]
+  else [{}, text]
 
 markdownSection = (text, type) ->
-  section = {text, type}
-  info = markdownMeta(text)
-  for key, value of info.metadata
+  [section, text] = extractFrontMatter(text)
+  section.type = type
+  section.text = text
+  for key, value of section
     section[key] = value
   section
-
 
 startSectionRegex = /{%\s*(\w+)\s*%}/
 extractSections = (text) ->
@@ -38,10 +43,10 @@ extractSections = (text) ->
 
 
 lexer = (text, callback) ->
-  info = markdownMeta(text)
-  tree = extractSections(text)
-  tree.metadata = info.metadata
-  tree.references = info.references
-  callback(null, tree)
+  [info, text] = extractFrontMatter(text)
+  list = extractSections(text)
+  list.metadata = info
+  list.references = markdown.lexer(text).links
+  callback(null, list)
 
-module.exports = {lexer}
+module.exports = {extractFrontMatter, lexer}

@@ -6,7 +6,7 @@ info =
   keywords: 'template templating markdown mustache'
 
   dependencies:
-    namp: '0.2.25'
+    marked: '0.2.7'
 
   devDependencies:
     'coffee-script': '1.4.0'

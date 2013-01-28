@@ -11,11 +11,11 @@ source: IMG2709.jpg
 a **Pork Belly Cubano** from [Bunk Bar][bunk]
 {% endimage %}
 
-I think the [sandwich][] has to be one of my *favorite* forms of food. My favorite
-has to be the {{ sandwiches.favorite.title }} and I particularly like the ones
-from {{ references.bunk.title }}.
+I think the [sandwich][] has to be one of my *favorite* forms of food. My
+favorite has to be the {{ sandwiches.favorite.title }} and I particularly like
+the ones from {{ references.bunk.title }}.
 
-My wife prefers {{ sanwiches.blt.title }}, and although she doesn't like eating
+My wife prefers {{ sandwiches.blt.title }}, and although she doesn't like eating
 Lamb, I think she would like to try an MLT sometime. After all:
 
 {% blockquote %}
