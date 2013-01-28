@@ -14,6 +14,12 @@ Markstache is a template rendering system with a few goals:
 5. Provide a higher-level component system for creating specialized markup
    components, such as image galleries or such.
 
+## Dependencies
+
+- [marked](https://github.com/chjj/marked): Markdown Rendering. It's fast,
+  maintained, and the maintainer seems responsive.
+- [mustache](https://github.com/janl/mustache.js): Mustache Rendering.
+
 ## Developer Dependencies
 
 - CoffeeScript: What all the code is written in. Deal with it.
