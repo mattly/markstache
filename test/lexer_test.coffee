@@ -15,12 +15,13 @@ describe 'lexing', ->
   tree = undefined
   lex = (cb) -> markstache.lexer(sourceText, cb)
   sections = [
-    { type:'text', text: /title/ }
-    { type:'image', size:'500x300', align:'right', text:/\*\*Pork/
-    source:'IMG2709.jpg', title:'Mmmm...' }
-    { type:'text', text: [/favorite/, /MLT/] }
-    { type:'blockquote', author: 'Miracle {{ miracleWorker }}',
-    text: /tomato is ripe./ }
+    { type:'text', tokens: [{type:'heading', depth: 1, text: /title/ }]}
+    { type:'image', size:'500x300', align:'right', source:'IMG2709.jpg',
+    title:'Mmmm...', tokens:[{type:'paragraph', text:/\*\*Pork/}] }
+    { type:'text', tokens: [
+      {type:'paragraph', text:/favorite/}, {type:'paragraph', text:/MLT/}] }
+    { type:'blockquote', author: 'Miracle {{ miracleWorker }}', tokens: [
+      {type:'paragraph', text:/tomato is ripe./}]}
   ]
 
   checkProperty = (obj, prop, expected) ->
@@ -47,5 +48,17 @@ describe 'lexing', ->
     assert.instanceOf(tree, Array)
     for section, idx in sections
       assert.ok(tree[idx])
-      checkProperty(tree[idx], key, value) for key, value of section
+      for key, value of section when key isnt 'tokens'
+        checkProperty(tree[idx], key, value)
+      assert.property(tree[idx], 'tokens')
+      tokenIdx = -1
+      for token in section.tokens
+        tokenIdx += 1
+        while token.type isnt tree[idx].tokens[tokenIdx].type
+          tokenIdx += 1
+          if not tree[idx].tokens[tokenIdx]
+            assert.ok(false, "count not find next #{token.type} token")
+            break
+        for key, value of token when key isnt 'type'
+          checkProperty(tree[idx].tokens[tokenIdx], key, value)
 

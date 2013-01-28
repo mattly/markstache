@@ -17,7 +17,7 @@ extractFrontMatter = (text) ->
 markdownSection = (text, type) ->
   [section, text] = extractFrontMatter(text)
   section.type = type
-  section.text = text
+  section.tokens = markdown.lexer(text)
   section
 
 startSectionRegex = /{%\s*(\w+)\s*%}/
@@ -30,13 +30,13 @@ extractSections = (text) ->
       startBody = startPos + marker.length
       if startPos > 0
         leading = text.substr(0, startPos)
-        sections.push({type:'text', text:leading})
+        sections.push(markdownSection(leading, 'text'))
       endSection = text.match(///{%\s*end#{type}\s*%}///)
       raw = text.substr(startBody, endSection.index).trim()
       sections.push(markdownSection(raw, type))
       text = text.substring(endSection.index + endSection[0].length).trim()
     else
-      sections.push({type:'text', text})
+      sections.push(markdownSection(leading, 'text'))
       text = ''
   sections
 
@@ -45,7 +45,10 @@ lexer = (text, callback) ->
   [info, text] = extractFrontMatter(text)
   list = extractSections(text)
   list.metadata = info
-  list.references = markdown.lexer(text).links
+  list.references = {}
+  for section in list
+    for name, link of section.tokens.links
+      list.references[name] = link
   callback(null, list)
 
 module.exports = {extractFrontMatter, lexer}
