@@ -11,12 +11,17 @@ info =
   bugs: "https://#{github}/issues"
 
   dependencies:
+    # markdown parser
     marked: '0.2.7'
 
   devDependencies:
     'coffee-script': '1.4.0'
+    # test runner / framework
     mocha: '1.8.1'
+    # assertions helper
     chai: '1.4.2'
+    # dom parsing
+    cheerio: '0.10.5'
 
   main: 'markstache'
   engines: { node: '*' }
