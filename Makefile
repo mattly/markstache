@@ -11,7 +11,7 @@ package.json:
 	coffee package.coffee > package.json
 
 clean:
-	rm markstache.js
-	rm package.json
+	rm -f markstache.js
+	rm -f package.json
 
 .PHONY: test test-unit clean
