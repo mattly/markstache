@@ -1,4 +1,5 @@
 markdown = require('marked')
+mustache = require('mustache')
 
 frontMatterLine = /^(\w+):\s*(.*)$/m
 
@@ -55,7 +56,9 @@ parser = (tree, context, callback) ->
   output = []
   for section in tree
     section.tokens.links = tree.references
-    output.push(markdown.parser(section.tokens))
+    mdOut = markdown.parser(section.tokens)
+    muOut = mustache.render(mdOut, context)
+    output.push(muOut)
   callback(null, output.join('\n'))
 
 module.exports = {

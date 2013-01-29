@@ -6,18 +6,18 @@ source = require('fs').readFileSync('test/fixtures/markstache.md', 'utf8')
 
 describe 'rendering', ->
   describe 'default/missing component types', ->
-    textComponent =
-      type: 'text'
-      tokens: [{ type: 'paragraph', text: '{{ prefix }} make me a [sandwich][]' }]
-    tree = [textComponent]
-    tree.references = { sandwich: { href:'sammichlink', title:'sammichtitle' } }
     context = { prefix: 'sudo' }
     output = null
     html = null
 
     beforeEach (done) ->
-      markstache.parser tree, null, (err, text) ->
-        if err then return done9err
+      textComponent =
+        type: 'text'
+        tokens: [{ type: 'paragraph', text: '{{ prefix }} make me a [sandwich][]' }]
+      tree = [textComponent]
+      tree.references = { sandwich: { href:'sammichlink', title:'sammichtitle' } }
+      markstache.parser tree, context, (err, text) ->
+        if err then return done(err)
         output = text
         html = domify(text)
         done()
@@ -28,7 +28,9 @@ describe 'rendering', ->
       assert.equal(link.attr('href'), 'sammichlink')
       assert.equal(link.attr('title'), 'sammichtitle')
 
-    it 'renders context variables into text mustache'
+    it 'renders context variables into text mustache', ->
+      assert.match(html('p').text(), /^sudo make/)
+
     it 'does not render context variables as markdown'
     it 'renders markdown references into context for mustache'
 
