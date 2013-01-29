@@ -54,6 +54,7 @@ lexer = (text, callback) ->
 
 parser = (tree, context, callback) ->
   output = []
+  context.$refs = tree.references
   for section in tree
     section.tokens.links = tree.references
     mdOut = markdown.parser(section.tokens)

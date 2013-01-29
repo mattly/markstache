@@ -6,16 +6,21 @@ source = require('fs').readFileSync('test/fixtures/markstache.md', 'utf8')
 
 describe 'rendering', ->
   describe 'default/missing component types', ->
-    context = { prefix: 'sudo' }
+    context = { prefix: '_sudo_' }
+    references =
+      sandwich: { href: 'link', title: 'title' }
+      bacon: { href: '', title: 'bacon' }
     output = null
     html = null
 
     beforeEach (done) ->
       textComponent =
         type: 'text'
-        tokens: [{ type: 'paragraph', text: '{{ prefix }} make me a [sandwich][]' }]
+        tokens: [{ type: 'paragraph', text:
+          '{{ prefix }} make me a {{ $refs.bacon.title }}[sandwich][]'
+        }]
       tree = [textComponent]
-      tree.references = { sandwich: { href:'sammichlink', title:'sammichtitle' } }
+      tree.references = references
       markstache.parser tree, context, (err, text) ->
         if err then return done(err)
         output = text
@@ -25,14 +30,14 @@ describe 'rendering', ->
     it 'renders references into text markdown', ->
       link = html('a')
       assert.equal(link.text(), 'sandwich')
-      assert.equal(link.attr('href'), 'sammichlink')
-      assert.equal(link.attr('title'), 'sammichtitle')
+      assert.equal(link.attr('href'), 'link')
+      assert.equal(link.attr('title'), 'title')
 
-    it 'renders context variables into text mustache', ->
-      assert.match(html('p').text(), /^sudo make/)
+    it 'renders context variables into text mustache pre-markdown', ->
+      assert.match(html('p').text(), /^_sudo_ make/)
 
-    it 'does not render context variables as markdown'
-    it 'renders markdown references into context for mustache'
+    it 'renders markdown references into context for mustache', ->
+      assert.match(html('p').text(), /bacon/)
 
   describe 'component sections', ->
     it 'provides the component type'
