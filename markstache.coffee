@@ -51,4 +51,15 @@ lexer = (text, callback) ->
       list.references[name] = link
   callback(null, list)
 
-module.exports = {extractFrontMatter, lexer}
+parser = (tree, context, callback) ->
+  output = []
+  for section in tree
+    section.tokens.links = tree.references
+    output.push(markdown.parser(section.tokens))
+  callback(null, output.join('\n'))
+
+module.exports = {
+  extractFrontMatter
+  lexer
+  parser
+}
