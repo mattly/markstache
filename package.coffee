@@ -13,6 +13,8 @@ info =
   dependencies:
     # markdown parser
     marked: '0.2.7'
+    # mustache renderer
+    mustache: '0.7.2'
 
   devDependencies:
     'coffee-script': '1.4.0'

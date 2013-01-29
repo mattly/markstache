@@ -19,7 +19,8 @@
   "repository": "git://github.com/mattly/markstache.git",
   "bugs": "https://github.com/mattly/markstache/issues",
   "dependencies": {
-    "marked": "0.2.7"
+    "marked": "0.2.7",
+    "mustache": "0.7.2"
   },
   "devDependencies": {
     "coffee-script": "1.4.0",
