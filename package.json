@@ -28,6 +28,9 @@
     "chai": "1.4.2",
     "cheerio": "0.10.5"
   },
+  "scripts": {
+    "test": "make test"
+  },
   "main": "markstache",
   "engines": {
     "node": "*"

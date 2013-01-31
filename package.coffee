@@ -25,6 +25,14 @@ info =
     # dom parsing
     cheerio: '0.10.5'
 
+  scripts:
+    # preinstall
+    # postinstall
+    # poststart
+    # prepublish
+    # pretest
+    test: "make test"
+
   main: 'markstache'
   engines: { node: '*' }
 
