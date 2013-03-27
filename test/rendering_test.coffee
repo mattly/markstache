@@ -4,7 +4,7 @@ domify = require('cheerio').load
 markstache = require('../markstache')
 source = require('fs').readFileSync('test/fixtures/markstache.md', 'utf8')
 
-describe 'rendering', ->
+describe 'rendering HTML', ->
   describe 'default/missing component types', ->
     context = { prefix: '_sudo_' }
     references =
@@ -21,7 +21,7 @@ describe 'rendering', ->
         }]
       tree = [textComponent]
       tree.references = references
-      markstache.parser tree, context, (err, text) ->
+      markstache.renderHTML tree, context, (err, text) ->
         if err then return done(err)
         output = text
         html = domify(text)

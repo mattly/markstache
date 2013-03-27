@@ -56,18 +56,44 @@ lexer = (text, callback) ->
       list.references[name] = link
   callback(null, list)
 
-parser = (tree, context, callback) ->
-  output = []
+render = (format, tree, context, callback) ->
   context.$refs = tree.references
-  for section in tree
-    section.tokens.links = tree.references
-    mdOut = markdown.parser(section.tokens)
-    muOut = mustache.render(mdOut, context)
-    output.push(muOut)
-  callback(null, output.join('\n'))
+  sections = (section for section in tree)
+  output = []
+  next = ->
+    if section = sections.pop()
+      renderers[section.type](section, context, format, chain)
+    else
+      out = mustache.render(output.join('\n'), context)
+      callback(null, out)
+  chain = (err, result) ->
+    if err then return cb(err)
+    output.push(result)
+    next()
+  next()
+
+curryL = (argsL..., fn) ->
+  (argsR...) ->
+    fn.apply(undefined, argsL.concat(argsR))
+
+renderHTML = curryL('html', render)
+renderText = curryL('text', render)
+
+renderers =
+  text: (tree, context, format, cb) ->
+    if cb is undefined and format instanceof 'function'
+      cb = format
+      format = 'text'
+    switch format
+      when 'html'
+        tree.tokens.links = context.$refs
+        cb(null, markdown.parser(tree.tokens))
+      else cb(null, tree.rawText)
 
 module.exports = {
   extractFrontMatter
   lexer
-  parser
+  renderHTML
+  renderText
+  renderers
 }
