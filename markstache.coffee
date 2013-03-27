@@ -38,14 +38,17 @@ extractSections = (text) ->
       sections.push(markdownSection(raw, type))
       text = text.substring(endSection.index + endSection[0].length).trim()
     else
-      sections.push(markdownSection(leading, 'text'))
+      sections.push(markdownSection(text, 'text'))
       text = ''
   sections
 
 
 lexer = (text, callback) ->
-  [info, text] = extractFrontMatter(text)
-  list = extractSections(text)
+  try
+    [info, body] = extractFrontMatter(text)
+    list = extractSections(body)
+  catch e
+    return callback(e)
   list.metadata = info
   list.references = {}
   for section in list
