@@ -12,13 +12,14 @@ extractFrontMatter = (text) ->
       [line, key, value] = match
       frontMatter[key.toLowerCase()] = value
       lines.shift()
-    [frontMatter, rest.join('\n\n')]
+    [frontMatter, rest.join("\n\n")]
   else [{}, text]
 
 markdownSection = (text, type) ->
   [section, text] = extractFrontMatter(text)
   section.type = type
   section.tokens = markdown.lexer(text)
+  section.rawText = text
   section
 
 startSectionRegex = /{%\s*(\w+)\s*%}/

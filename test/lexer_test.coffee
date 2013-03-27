@@ -44,6 +44,10 @@ describe 'lexing', ->
     assert(tree.references)
     assert.equal(tree.references.pbride?.href, 'page:princessbride')
 
+  it 'stores raw template text', ->
+    for section in tree
+      assert(section.rawText)
+
   it 'extracts inline components', ->
     assert.instanceOf(tree, Array)
     for section, idx in sections
