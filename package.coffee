@@ -2,7 +2,7 @@ github = 'github.com/mattly/markstache'
 info =
   name: 'markstache'
   description: 'Markdown and Mustache: Two great tastes together at last.'
-  version: '0.0.2'
+  version: '0.0.3'
   author: 'Matthew Lyon <matthew@lyonheart.us>'
   keywords: 'template templating markdown mustache'.split(' ')
   tags: 'template templating markdown mustache'.split(' ')
@@ -29,7 +29,7 @@ info =
     # preinstall
     # postinstall
     # poststart
-    # prepublish
+    prepublish: "make build"
     # pretest
     test: "make test"
 

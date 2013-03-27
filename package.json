@@ -1,7 +1,7 @@
 {
   "name": "markstache",
   "description": "Markdown and Mustache: Two great tastes together at last.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Matthew Lyon <matthew@lyonheart.us>",
   "keywords": [
     "template",
@@ -29,6 +29,7 @@
     "cheerio": "0.10.5"
   },
   "scripts": {
+    "prepublish": "make build",
     "test": "make test"
   },
   "main": "markstache",
