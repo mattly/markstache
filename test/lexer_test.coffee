@@ -8,12 +8,11 @@ sourceText = undefined
 sample = 'test/fixtures/markstache.md'
 
 before together()
-  .setter('data', fs.readFile, sample, 'utf8')
+  .do(-> fs.readFile(sample, 'utf8', @setter('data')))
   .do(-> sourceText = @get('data'))
 
 describe 'lexing', ->
   tree = undefined
-  lex = (cb) -> markstache.lexer(sourceText, cb)
   sections = [
     { type:'text', tokens: [{type:'heading', depth: 1, text: /title/ }]}
     { type:'image', size:'500x300', align:'right', source:'IMG2709.jpg',
@@ -33,7 +32,7 @@ describe 'lexing', ->
     else assert.propertyVal(obj, prop, expected)
 
   beforeEach together()
-    .setter('tree', lex)
+    .do(-> markstache.lexer(sourceText, @setter('tree')))
     .do(-> tree = @get('tree'))
 
   it 'extracts frontmatter metadata', ->
